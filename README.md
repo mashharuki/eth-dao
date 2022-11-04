@@ -28,6 +28,18 @@ SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
 ✨  Done in 41.41s.
 ```
 
+### NFTのメタデータをセットするコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/3-config-nft.ts
+```
+
+### NFTをミントするコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/4-set-claim-condition.ts
+```
+
 ### thirdwebのSDKを使ってSignerオブジェクトを生成するサンプルコード
 
 ```ts
@@ -55,3 +67,4 @@ const sdk = new ThirdwebSDK(
 3. [thirdweb Contracts](https://github.com/thirdweb-dev/contracts)
 4. [chainlink faucet](https://faucets.chain.link/)
 5. [DropERC1155.sol](https://github.com/thirdweb-dev/contracts/blob/main/contracts/drop/DropERC1155.sol)
+6. [Mash DAO Membership NFT](https://goerli.etherscan.io/token/0xFBF64a8A3A4fCabb4042946192217090ae2B82C6)
