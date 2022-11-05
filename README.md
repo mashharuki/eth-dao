@@ -40,6 +40,56 @@ yarn node --loader ts-node/esm src/scripts/3-config-nft.ts
 yarn node --loader ts-node/esm src/scripts/4-set-claim-condition.ts
 ```
 
+### ERC20規格対応のトークンをデプロイするコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/5-deploy-token.ts
+```
+
+```zsh
+Loaded env from /Users/harukikondo/git/eth-dao/dao-dapp/.env.local
+SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+✅ Successfully deployed token module, address: 0xa2FBF6F1A847365AeA6937950575b3c974F5464f
+✨  Done in 45.45s.
+```
+
+### トークンをmintするコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/6-print-money.ts
+```
+
+```zsh
+SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+✅ There now is 1000000.0 $MSH in circulation
+✨  Done in 36.39s.
+```
+
+### ガバナンスコントラクトをデプロイするコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/8-deploy-vote.ts
+```
+
+```zsh
+Loaded env from /Users/harukikondo/git/eth-dao/dao-dapp/.env.local
+SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+✅ Successfully deployed vote contract, address: 0x3C7B7f10a6276a200F825d45941c4A63ED4Fb480
+✨  Done in 36.51s.
+```
+
+### ガバナンストークンをトレジャリーに移転させるコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/9-setup-vote.ts
+```
+
+```zsh
+Successfully gave vote contract permissions to act on token contract
+✅ Successfully transferred 900000 tokens to vote contract
+✨  Done in 57.58s.
+```
+
 ### thirdwebのSDKを使ってSignerオブジェクトを生成するサンプルコード
 
 ```ts
@@ -68,3 +118,4 @@ const sdk = new ThirdwebSDK(
 4. [chainlink faucet](https://faucets.chain.link/)
 5. [DropERC1155.sol](https://github.com/thirdweb-dev/contracts/blob/main/contracts/drop/DropERC1155.sol)
 6. [Mash DAO Membership NFT](https://goerli.etherscan.io/token/0xFBF64a8A3A4fCabb4042946192217090ae2B82C6)
+7. [TokenERC20.sol](https://github.com/thirdweb-dev/contracts/blob/main/contracts/token/TokenERC20.sol)
