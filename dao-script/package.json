@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "init:sdk": "yarn node --loader ts-node/esm src/1-initialize-sdk.ts"
+    "init:sdk": "yarn node --loader ts-node/esm src/1-initialize-sdk.ts",
+    "revoke": "yarn node --loader ts-node/esm src/11-revoke-roles.ts"
   },
   "keywords": [],
   "author": "",

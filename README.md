@@ -104,6 +104,37 @@ SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
 ✨  Done in 29.61s.
 ```
 
+### トークンの発行権を取り除くコマンド
+
+```zsh
+yarn revoke
+```
+
+```zsh
+DK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+👀 Roles that exist right now: {
+  admin: [ '0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072' ],
+  minter: [
+    '0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072',
+    '0x3C7B7f10a6276a200F825d45941c4A63ED4Fb480'
+  ],
+  transfer: [
+    '0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072',
+    '0x0000000000000000000000000000000000000000'
+  ]
+}
+🎉 Roles after revoking ourselves {
+  admin: [],
+  minter: [],
+  transfer: [
+    '0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072',
+    '0x0000000000000000000000000000000000000000'
+  ]
+}
+✅ Successfully revoked our superpowers from the ERC-20 contract
+✨  Done in 43.83s.
+```
+
 ### thirdwebのSDKを使ってSignerオブジェクトを生成するサンプルコード
 
 ```ts
