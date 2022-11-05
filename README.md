@@ -90,6 +90,20 @@ Successfully gave vote contract permissions to act on token contract
 ✨  Done in 57.58s.
 ```
 
+### 提案内容を作成するコマンド
+
+```zsh
+yarn node --loader ts-node/esm src/scripts/10-create-vote-proposals.ts
+```
+
+```zsh
+Loaded env from /Users/harukikondo/git/eth-dao/dao-dapp/.env.local
+SDK initialized by address: 0x51908F598A5e0d8F1A3bAbFa6DF76F9704daD072
+✅ Successfully created proposal to mint tokens
+✅ Successfully created proposal to reward ourselves from the treasury, let's hope people vote for it!
+✨  Done in 29.61s.
+```
+
 ### thirdwebのSDKを使ってSignerオブジェクトを生成するサンプルコード
 
 ```ts
