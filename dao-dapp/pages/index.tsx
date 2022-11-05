@@ -5,6 +5,7 @@ import {
   useAddress,
   useContract
 } from "@thirdweb-dev/react";
+import { AddressZero } from "@ethersproject/constants";
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect, useMemo } from "react";
@@ -26,13 +27,16 @@ const Home: NextPage = () => {
   const [isClaiming, setIsClaiming] = useState(false);
   const [memberTokenAmounts, setMemberTokenAmounts] = useState<any>([]);
   const [memberAddresses, setMemberAddresses] = useState<string[] | undefined>([]);
+  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [isVoting, setIsVoting] = useState(false);
+  const [hasVoted, setHasVoted] = useState(false);
 
   // NFT コントラクト
   const editionDrop = useContract(editionAddr, "edition-drop").contract;
   // Token コントラクト
   const token = useContract(tokenAddr, "token").contract;
   // Governance コントラクト
-  const vote = useContract("INSERT_VOTE_ADDRESS", "vote").contract;
+  const vote = useContract(voteAddr, "vote").contract;
 
   /**
    * create short address
@@ -90,6 +94,39 @@ const Home: NextPage = () => {
   };
 
   /**
+   * get All proposal
+   */
+  const getAllProposals = async () => {
+    try {
+      // get all proposal
+      const proposals = await vote!.getAll();
+      setProposals(proposals);
+      console.log("🌈 Proposals:", proposals);
+    } catch (error) {
+      console.log("failed to get proposals", error);
+    }
+  };
+
+  /**
+   * check vote status
+   */
+  const checkIfUserHasVoted = async () => {
+    try {
+      // get vote status
+      const hasVoted = await vote!.hasVoted(proposals[0].proposalId.toString(), address);
+      setHasVoted(hasVoted);
+
+      if (hasVoted) {
+        console.log("🥵 User has already voted");
+      } else {
+        console.log("🙂 User has not voted yet");
+      }
+    } catch (error) {
+      console.error("Failed to check if wallet has voted", error);
+    }
+  };
+
+  /**
    * Mint NFT function
    */
   const mintNft = async () => {
@@ -129,6 +166,25 @@ const Home: NextPage = () => {
     }
     getAllBalances();
   }, [hasClaimedNFT, token?.history]);
+
+  useEffect(() => {
+    if (!hasClaimedNFT) {
+      return;
+    }
+    getAllProposals();
+  }, [hasClaimedNFT, vote]);
+
+  useEffect(() => {
+    if (!hasClaimedNFT) {
+      return;
+    }
+    // 提案を取得し終えない限り、ユーザーが投票したかどうかを確認することができない
+    if (!proposals.length) {
+      return;
+    }
+    checkIfUserHasVoted();
+  }, [hasClaimedNFT, proposals, address, vote]);
+
 
   // create menmer's info (token balance & address)
   const memberList = useMemo(() => {
@@ -176,7 +232,7 @@ const Home: NextPage = () => {
                     <p>Congratulations on being a member</p>
                     <div>
                       <div>
-                        <h2>Member List</h2>
+                        <h2>■ Member List</h2>
                         <table className="card">
                           <thead>
                             <tr>
@@ -195,6 +251,118 @@ const Home: NextPage = () => {
                             })}
                           </tbody>
                         </table>
+                      </div>
+                      <div>
+                        <h2>■ Active Proposals</h2>
+                        <form
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setIsVoting(true);
+
+                            // フォームから値を取得します
+                            const votes = proposals.map((proposal) => {
+                              const voteResult = {
+                                proposalId: proposal.proposalId,
+                                vote: 2,
+                              };
+                              proposal.votes.forEach((vote) => {
+                                const elem = document.getElementById(
+                                  proposal.proposalId + "-" + vote.type
+                                ) as HTMLInputElement;
+
+                                if (elem!.checked) {
+                                  voteResult.vote = vote.type;
+                                  return;
+                                }
+                              });
+                              return voteResult;
+                            });
+
+                            try {
+                              // 投票する前にウォレットがトークンを委譲する必要があるかどうかを確認します
+                              const delegation = await token!.getDelegationOf(address);
+                              // トークンを委譲していない場合は、投票前に委譲します
+                              if (delegation === AddressZero) {
+                                await token!.delegateTo(address);
+                              }
+                              
+                              try {
+                                await Promise.all(
+                                  votes.map(async ({ proposalId, vote: _vote }) => {
+                                    // check status
+                                    const proposal = await vote!.get(proposalId);
+                                    
+                                    if (proposal.state === 1) {
+                                      return vote!.vote(proposalId.toString(), _vote);
+                                    }
+                                    return;
+                                  })
+                                );
+
+                                try {
+                                  await Promise.all(
+                                    votes.map(async ({ proposalId }) => {
+                                      const proposal = await vote!.get(proposalId);
+
+                                      // execute
+                                      if (proposal.state === 4) {
+                                        return vote!.execute(proposalId.toString());
+                                      }
+                                    })
+                                  );
+                                  setHasVoted(true);
+                                  console.log("successfully voted");
+                                } catch (err) {
+                                  console.error("failed to execute votes", err);
+                                }
+                              } catch (err) {
+                                console.error("failed to vote", err);
+                              }
+                            } catch (err) {
+                              console.error("failed to delegate tokens");
+                            } finally {
+                              setIsVoting(false);
+                            }
+                          }}
+                        >
+                          {proposals.map((proposal) => (
+                            <div key={proposal.proposalId.toString()} className="card">
+                              <h5>{proposal.description}</h5>
+                              <div>
+                                {proposal.votes.map(({ type, label }) => (
+                                  <div key={type}>
+                                    <input
+                                      type="radio"
+                                      id={proposal.proposalId + "-" + type}
+                                      name={proposal.proposalId.toString()}
+                                      value={type}
+                                      defaultChecked={type === 2}
+                                    />
+                                    <label htmlFor={proposal.proposalId + "-" + type}>
+                                      {label}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                          <p></p>
+                          <button disabled={isVoting || hasVoted} type="submit">
+                            {isVoting
+                              ? "Voting..."
+                              : hasVoted
+                                ? "You Already Voted"
+                                : "Submit Votes"}
+                          </button>
+                          <p></p>
+                          {!hasVoted && (
+                            <small>
+                              This will trigger multiple transactions that you will need to
+                              sign.
+                            </small>
+                          )}
+                        </form>
                       </div>
                     </div>
                   </main>
