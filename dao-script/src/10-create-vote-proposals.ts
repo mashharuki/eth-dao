@@ -1,5 +1,7 @@
 import sdk from "./1-initialize-sdk.js";
 import { ethers } from "ethers";
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const vote = sdk.getContract("0x3C7B7f10a6276a200F825d45941c4A63ED4Fb480", "vote");
 const token = sdk.getContract("0xa2FBF6F1A847365AeA6937950575b3c974F5464f", "token");

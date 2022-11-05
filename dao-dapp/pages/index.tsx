@@ -8,6 +8,7 @@ import {
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect, useMemo } from "react";
+import { Proposal } from "@thirdweb-dev/sdk";
 
 /**
  * Home Component
@@ -20,6 +21,7 @@ const Home: NextPage = () => {
   const [network, switchNetwork] = useNetwork();
   const [editionAddr, setEidtionAddr] = useState("0xFBF64a8A3A4fCabb4042946192217090ae2B82C6");
   const [tokenAddr, setTokenAddr] = useState("0xa2FBF6F1A847365AeA6937950575b3c974F5464f");
+  const [voteAddr, setVoteAddr] = useState("0x3C7B7f10a6276a200F825d45941c4A63ED4Fb480");
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
   const [memberTokenAmounts, setMemberTokenAmounts] = useState<any>([]);
@@ -29,6 +31,8 @@ const Home: NextPage = () => {
   const editionDrop = useContract(editionAddr, "edition-drop").contract;
   // Token コントラクト
   const token = useContract(tokenAddr, "token").contract;
+  // Governance コントラクト
+  const vote = useContract("INSERT_VOTE_ADDRESS", "vote").contract;
 
   /**
    * create short address

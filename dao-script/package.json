@@ -1,0 +1,23 @@
+{
+  "name": "dao-script",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "init:sdk": "yarn node --loader ts-node/esm src/1-initialize-sdk.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@ethersproject/constants": "^5.7.0",
+    "@types/node": "^12.20.55",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@thirdweb-dev/sdk": "^3.5.1",
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2"
+  }
+}
