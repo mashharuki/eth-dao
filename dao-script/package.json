@@ -6,6 +6,15 @@
   "main": "index.js",
   "scripts": {
     "init:sdk": "yarn node --loader ts-node/esm src/1-initialize-sdk.ts",
+    "deploy:drop": "yarn node --loader ts-node/esm src/2-deploy-drop.ts",
+    "config:nft": "yarn node --loader ts-node/esm src/3-config-nft.ts",
+    "setClaim": "yarn node --loader ts-node/esm src/4-set-claim-condition.ts",
+    "deploy:token": "yarn node --loader ts-node/esm src/5-deploy-token.ts",
+    "printMoney": "yarn node --loader ts-node/esm src/6-print-money.ts",
+    "airdrop": "yarn node --loader ts-node/esm src/7-airdrop-token.ts",
+    "deploy:vote": "yarn node --loader ts-node/esm src/8-deploy-vote.ts",
+    "setup:vote": "yarn node --loader ts-node/esm src/9-setup-vote.ts",
+    "create:proposal": "yarn node --loader ts-node/esm src/10-create-vote-proposals.ts",
     "revoke": "yarn node --loader ts-node/esm src/11-revoke-roles.ts"
   },
   "keywords": [],

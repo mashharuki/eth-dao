@@ -164,3 +164,4 @@ const sdk = new ThirdwebSDK(
 5. [DropERC1155.sol](https://github.com/thirdweb-dev/contracts/blob/main/contracts/drop/DropERC1155.sol)
 6. [Mash DAO Membership NFT](https://goerli.etherscan.io/token/0xFBF64a8A3A4fCabb4042946192217090ae2B82C6)
 7. [TokenERC20.sol](https://github.com/thirdweb-dev/contracts/blob/main/contracts/token/TokenERC20.sol)
+8. [【OpenSea】Mash DAO Membership NFT](https://testnets.opensea.io/assets/goerli/0xfbf64a8a3a4fcabb4042946192217090ae2b82c6/0)
